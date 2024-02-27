@@ -8,8 +8,12 @@ pub struct Guess {
 
 impl Guess {
     pub fn new(value: i32) -> Guess {
-        if value < 1 || value > 9 {
-            panic!("Guess value must be between 0 and 10, got {value}");
+        if value < 1 {
+            panic!("Guess value must be greater than or equal to 1, got {value}");
+        }
+
+        if value > 9 {
+            panic!("Guess value must be less than or equal to 9, got {value}");
         }
 
         Guess { value }
@@ -51,5 +55,22 @@ fn main() {
                 break;
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic(expected = "less than or equal to 9")]
+    fn greater_than_9() {
+        Guess::new(20);
+    }
+
+    #[test]
+    #[should_panic(expected = "greater than or equal to 1")]
+    fn less_than_1() {
+        Guess::new(-9);
     }
 }
