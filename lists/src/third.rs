@@ -34,6 +34,18 @@ impl<T> List<T> {
     pub fn head(&self) -> Option<&T> {
         self.head.as_ref().map(|node| &node.elem)
     }
+
+    pub fn drop(&mut self) {
+        let mut head = self.head.take();
+
+        while let Some(node) = head {
+            if let Ok(mut node) = Rc::try_unwrap(node) {
+                head = node.next.take();
+            } else {
+                break;
+            }
+        }
+    }
 }
 
 pub struct Iter<'a, T> {
